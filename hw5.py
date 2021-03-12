@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Tuple
+import time
 
 
 
@@ -117,14 +118,14 @@ def jacobi(A: np.ndarray, b: np.ndarray, x0: np.ndarray,
     n += 1
     x = x_new
 
-  return x_new, n
+  return x, n
 
 def jacobi2(A: np.ndarray, b: np.ndarray, x0: np.ndarray, 
             threshold: float, itermax: int) -> Tuple[np.ndarray, int]:
   # CONVERGES AT THE SAME RATE
   n = 0
   x = x0
-  while np.linalg.norm((A @ x - b))/np.linalg.norm(b) > threshold and n < itermax:
+  while np.linalg.norm((A @ x) - b)/np.linalg.norm(b) > threshold and n < itermax:
     x_new = np.zeros_like(x)
     for i in range(A.shape[0]):
       x_new[i] = (b[i] - np.dot(A[i,:i],x[:i]) - np.dot(A[i,i+1:],x[i+1:])) / A[i,i]
@@ -135,11 +136,18 @@ def jacobi2(A: np.ndarray, b: np.ndarray, x0: np.ndarray,
 
 
 x0 = np.ones(m)
-threshold = 1e-2
-itermax = 10000
+threshold = 1e-6
+itermax = 100000
 
+tic = time.perf_counter()
 x_hat, itercount = jacobi(A,b,x0,threshold,itermax)
+toc = time.perf_counter()
+print(f"Jacobi in {toc - tic:0.4f} seconds")
+
+tic = time.perf_counter()
 x_hat2, itercount2 = jacobi2(A,b,x0,threshold,itermax)
+toc = time.perf_counter()
+print(f"Jacobi2 in {toc - tic:0.4f} seconds")
 
 rmr1 = np.linalg.norm(A @ x_hat - b)/np.linalg.norm(b)
 rmr2 = np.linalg.norm(A @ x_hat2 - b)/np.linalg.norm(b)
@@ -163,6 +171,10 @@ def gauss_seidel(A: np.ndarray, b: np.ndarray, x0: np.ndarray,
   return x0, n
 
 
+
+tic = time.perf_counter()
 x_hat, itercount = gauss_seidel(A,b,x0,threshold,itermax)
+toc = time.perf_counter()
+print(f"Gauss-Seidel in {toc - tic:0.4f} seconds")
 rmr = np.linalg.norm(A @ x_hat - b)/np.linalg.norm(b)
 print(f"relative normed residual: {rmr} iterations: {itercount}")
