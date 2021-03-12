@@ -1,7 +1,6 @@
 import numpy as np
 from typing import Tuple
 
-from numpy.core.numeric import zeros_like
 
 
 def create_tridiagonal(m: int, band: Tuple) -> np.ndarray:
@@ -126,7 +125,7 @@ def jacobi2(A: np.ndarray, b: np.ndarray, x0: np.ndarray,
   n = 0
   x = x0
   while np.linalg.norm((A @ x - b))/np.linalg.norm(b) > threshold and n < itermax:
-    x_new = zeros_like(x)
+    x_new = np.zeros_like(x)
     for i in range(A.shape[0]):
       x_new[i] = (b[i] - np.dot(A[i,:i],x[:i]) - np.dot(A[i,i+1:],x[i+1:])) / A[i,i]
     n += 1
