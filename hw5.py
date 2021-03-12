@@ -136,7 +136,7 @@ def jacobi2(A: np.ndarray, b: np.ndarray, x0: np.ndarray,
 
 
 x0 = np.ones(m)
-threshold = 1e-6
+threshold = 1e-2
 itermax = 100000
 
 tic = time.perf_counter()
