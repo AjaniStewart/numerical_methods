@@ -48,10 +48,12 @@ def max_grad_descent(x0: np.ndarray, thresh: float, max_iter: int) -> np.ndarray
     while LA.norm(A @ x - b) / LA.norm(b) > thresh and iter_count < max_iter:
         # step 1
         grad = gradient(*x)
-        # start of black magic (steps 2 and 3)
+        # start of black magic
         polys = [np.poly1d((-grad[i], x[i])) for i in range(len(grad))]
+        # step 2
         # h(t) = g(x-t*grad)
         h = g(*polys)
+        # step 3
         # find roots of derivative of h == find min
         t0 = h.deriv().r
         # end of black magic
