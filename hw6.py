@@ -2,6 +2,7 @@ import numpy as np
 import numpy.linalg as LA
 import time
 
+
 def gradient(x, y, z, w):
     # Calculated using mathematica
     g = np.array(
@@ -13,6 +14,7 @@ def gradient(x, y, z, w):
         ]
     )
     return g
+
 
 # step 0
 def g(x, y, z, w):
@@ -36,6 +38,7 @@ def g(x, y, z, w):
         + 59 * z ** 2
     )
 
+
 def max_grad_descent(x0: np.ndarray, thresh: float, max_iter: int) -> np.ndarray:
     # 0 if f : R^n -> R^m, minimize g : ||f - b|| ^ 2
     # so g : R^n -> R
@@ -49,6 +52,7 @@ def max_grad_descent(x0: np.ndarray, thresh: float, max_iter: int) -> np.ndarray
         # step 1
         grad = gradient(*x)
         # start of black magic
+        # works cause h is a polynomial
         polys = [np.poly1d((-grad[i], x[i])) for i in range(len(grad))]
         # step 2
         # h(t) = g(x-t*grad)
@@ -58,7 +62,7 @@ def max_grad_descent(x0: np.ndarray, thresh: float, max_iter: int) -> np.ndarray
         t0 = h.deriv().r
         # end of black magic
         # step 4
-        x = x - t0[0] * grad
+        x = x - t0 * grad
         iter_count += 1
     return x, iter_count
 
